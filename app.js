@@ -223,8 +223,9 @@ Object.entries(visualSections).forEach(([pageKey, visual]) => {
 const heroImages = { en: 'assets/hero-en.jpg', zh: 'assets/hero-zh.jpg' };
 let locale = 'zh';
 let currentPage = 'introduction';
+let tocObserver;
 
-function renderPage(pageKey, updateHash = true) {
+function renderPage(pageKey, updateHash = true, sectionId = '') {
   const page = pages[pageKey] || pages.introduction;
   currentPage = pages[pageKey] ? pageKey : 'introduction';
   const doc = document.querySelector('#doc-content');
@@ -235,10 +236,10 @@ function renderPage(pageKey, updateHash = true) {
   document.querySelector('#breadcrumb-current').textContent = page.label;
   document.querySelectorAll('.sidebar-link').forEach(link => link.classList.toggle('is-active', link.dataset.page === currentPage));
   document.querySelectorAll('.primary-link').forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === `#${currentPage}`));
-  document.querySelector('#toc-links').innerHTML = page.toc.map(([id, label]) => `<a href="#${id}">${label}</a>`).join('');
+  document.querySelector('#toc-links').innerHTML = page.toc.map(([id, label]) => `<a href="#${currentPage}/${id}" data-section="${id}">${label}</a>`).join('');
   if (updateHash && window.location.hash !== `#${currentPage}`) history.pushState({ page: currentPage }, '', `#${currentPage}`);
   document.querySelector('#sidebar').classList.remove('is-open');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  scrollToSection(sectionId);
   window.setTimeout(bindInternalPageLinks, 0);
   observeToc();
 }
@@ -256,14 +257,38 @@ function bindInternalPageLinks() {
 }
 
 function observeToc() {
+  tocObserver?.disconnect();
   const links = [...document.querySelectorAll('#toc-links a')];
-  const sections = links.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+  const sections = links.map(link => document.getElementById(link.dataset.section)).filter(Boolean);
   if (!sections.length) return;
-  const observer = new IntersectionObserver(entries => {
+  tocObserver = new IntersectionObserver(entries => {
     const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-    if (visible) links.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === `#${visible.target.id}`));
+    if (visible) links.forEach(link => link.classList.toggle('is-active', link.dataset.section === visible.target.id));
   }, { rootMargin: '-90px 0px -60% 0px', threshold: 0 });
-  sections.forEach(section => observer.observe(section));
+  sections.forEach(section => tocObserver.observe(section));
+}
+
+function scrollToSection(sectionId) {
+  requestAnimationFrame(() => {
+    const section = sectionId && document.getElementById(sectionId);
+    if (section) section.scrollIntoView({ block: 'start' });
+    else window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+}
+
+// Keep the document name in section URLs so reload and browser history retain context.
+function restoreRoute() {
+  const [pageKey = 'introduction', sectionId = ''] = window.location.hash.slice(1).split('/');
+  if (!pages[pageKey] && document.getElementById(pageKey)) {
+    scrollToSection(pageKey);
+    return;
+  }
+  const targetPage = pages[pageKey] ? pageKey : 'introduction';
+  if (targetPage !== currentPage || !document.querySelector('#doc-content').hasChildNodes()) {
+    renderPage(targetPage, false, sectionId);
+  } else {
+    scrollToSection(sectionId);
+  }
 }
 
 function openSearch() {
@@ -303,7 +328,7 @@ document.querySelector('#theme-toggle').onclick = () => { const next = document.
 document.querySelector('#language-toggle').onclick = () => { locale = locale === 'zh' ? 'en' : 'zh'; document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en'; renderPage(currentPage, false); };
 document.querySelector('#mobile-menu').onclick = () => { const sidebar = document.querySelector('#sidebar'); const isOpen = sidebar.classList.toggle('is-open'); document.querySelector('#mobile-menu').setAttribute('aria-expanded', String(isOpen)); };
 document.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch(); } if (event.key === 'Escape') closeSearch(); });
-window.addEventListener('popstate', () => renderPage(window.location.hash.slice(1) || 'introduction', false));
-window.addEventListener('hashchange', () => { const key = window.location.hash.slice(1) || 'introduction'; if (pages[key] && key !== currentPage) renderPage(key, false); });
+window.addEventListener('popstate', restoreRoute);
+window.addEventListener('hashchange', restoreRoute);
 document.querySelectorAll('.sidebar-link, .primary-link, .brand').forEach(link => link.onclick = event => { const page = link.dataset.page || link.getAttribute('href')?.slice(1); if (pages[page]) { event.preventDefault(); renderPage(page); } });
-renderPage(window.location.hash.slice(1) || 'introduction', false);
+restoreRoute();
