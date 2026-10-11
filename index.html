@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="RoboParty Docs - RP1 open humanoid platform documentation." />
     <title>RoboParty Docs</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20261012-report" />
   </head>
   <body>
     <div class="app-shell">
@@ -25,7 +25,7 @@
           </nav>
           <div class="topbar-actions">
             <button class="search-trigger" id="search-trigger" aria-label="搜索文档"><span>⌕</span><span class="search-label">搜索文档</span><kbd>Ctrl K</kbd></button>
-            <button class="text-button" id="language-toggle" aria-label="切换语言">中 / EN</button>
+            <a class="text-button report-top-link" href="#report">技术报告</a>
             <button class="icon-button" id="theme-toggle" aria-label="切换深色模式">☼</button>
           </div>
         </div>
@@ -34,7 +34,7 @@
       <div class="layout">
         <aside class="sidebar" id="sidebar">
           <div class="sidebar-scroll">
-            <div class="sidebar-heading"><span class="eyebrow">SYSTEMS</span><span class="version-chip">v0.1</span></div>
+            <div class="sidebar-heading"><span class="eyebrow">SYSTEMS</span><span class="version-chip">RP1</span></div>
             <a class="sidebar-title" href="#introduction">RP1 人形机器人平台</a>
             <p class="sidebar-summary">从机械设计到运动学习的开放开发栈</p>
             <div class="sidebar-section">
@@ -46,6 +46,9 @@
             <div class="sidebar-section">
               <div class="sidebar-section-label">开发指南</div>
               <a class="sidebar-link" href="#hardware" data-page="hardware"><span class="link-index">04</span>硬件与模型</a>
+              <a class="sidebar-link" href="#mechanical" data-page="mechanical">机械结构与快拆</a>
+              <a class="sidebar-link" href="#actuators" data-page="actuators">ROMOMO 关节模组</a>
+              <a class="sidebar-link" href="#hand" data-page="hand">RP Hand 灵巧手</a>
               <a class="sidebar-link" href="#motion" data-page="motion"><span class="link-index">05</span>运控与部署</a>
               <a class="sidebar-link" href="#interfaces" data-page="interfaces"><span class="link-index">06</span>运行时接口</a>
               <a class="sidebar-link" href="#testing" data-page="testing"><span class="link-index">07</span>整机测试</a>
@@ -55,11 +58,13 @@
             <div class="sidebar-section">
               <div class="sidebar-section-label">智能与学习</div>
               <a class="sidebar-link" href="#learning" data-page="learning"><span class="link-index">10</span>运动与行为</a>
+              <a class="sidebar-link" href="#partyos" data-page="partyos">PartyOS 感知与任务</a>
               <a class="sidebar-link" href="#training" data-page="training"><span class="link-index">11</span>训练工作区</a>
               <a class="sidebar-link" href="#data" data-page="data"><span class="link-index">12</span>数据与训练</a>
             </div>
             <div class="sidebar-section">
               <div class="sidebar-section-label">项目资源</div>
+              <a class="sidebar-link" href="#report" data-page="report">技术报告 v0.8.12</a>
               <a class="sidebar-link" href="#ecosystem" data-page="ecosystem"><span class="link-index">13</span>仓库导航</a>
               <a class="sidebar-link" href="#community" data-page="community"><span class="link-index">14</span>社区与贡献</a>
             </div>
@@ -92,6 +97,13 @@
         <div class="search-hint"><span>↑ ↓ 选择</span><span>Enter 打开</span><span>Esc 关闭</span></div>
       </section>
     </div>
-    <script src="app.js?v=20261012-2"></script>
+    <dialog class="figure-dialog" id="figure-dialog" aria-label="技术图大图" aria-describedby="figure-dialog-caption">
+      <div class="figure-dialog-toolbar"><a data-original-image target="_blank" rel="noreferrer">查看原尺寸</a><button class="icon-button" data-close-figure aria-label="关闭大图" title="关闭大图" autofocus>×</button></div>
+      <div class="figure-dialog-image"><img alt="" /></div>
+      <div class="figure-dialog-caption" id="figure-dialog-caption"></div>
+    </dialog>
+    <script src="assets/report/figures.js?v=20261012-report"></script>
+    <script src="report.js?v=20261012-report"></script>
+    <script src="app.js?v=20261012-report"></script>
   </body>
 </html>

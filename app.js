@@ -220,8 +220,12 @@ Object.entries(visualSections).forEach(([pageKey, visual]) => {
   pages[pageKey].body += visual.body;
 });
 
-const heroImages = { en: 'assets/hero-en.jpg', zh: 'assets/hero-zh.jpg' };
-let locale = 'zh';
+integrateTechnicalReport(pages);
+const pageSearchText = new Map(Object.entries(pages).map(([key, page]) => {
+  const template = document.createElement('template');
+  template.innerHTML = page.body;
+  return [key, `${page.title} ${page.label} ${page.lead} ${template.content.textContent}`.toLowerCase()];
+}));
 let currentPage = 'introduction';
 let tocObserver;
 
@@ -229,22 +233,24 @@ function renderPage(pageKey, updateHash = true, sectionId = '') {
   const page = pages[pageKey] || pages.introduction;
   currentPage = pages[pageKey] ? pageKey : 'introduction';
   const doc = document.querySelector('#doc-content');
-  const hero = currentPage === 'introduction'
-    ? `<div class="doc-hero"><img src="${heroImages[locale]}" alt="RP1 人形机器人平台" /><div class="doc-hero-copy"><span class="doc-hero-kicker">${page.kicker}</span><h1>${page.title}</h1><p>${page.lead}</p><div class="doc-hero-meta"><span><i class="meta-rule"></i>Updated 2026/10/09</span><span>▣ v0.1</span></div></div></div>`
-    : `<div class="doc-heading"><span class="doc-hero-kicker">${page.kicker}</span><h1>${page.title}</h1><p class="doc-lead">${page.lead}</p></div>`;
+  const hero = `<div class="doc-heading"><span class="doc-hero-kicker">${page.kicker}</span><h1>${page.title}</h1><p class="doc-lead">${page.lead}</p></div>`;
   doc.innerHTML = `<div class="doc-content">${hero}${page.body}</div>`;
   document.querySelector('#breadcrumb-current').textContent = page.label;
   document.querySelectorAll('.sidebar-link').forEach(link => link.classList.toggle('is-active', link.dataset.page === currentPage));
-  document.querySelectorAll('.primary-link').forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === `#${currentPage}`));
+  const primaryPage = ({platform:'introduction', quickstart:'introduction', mechanical:'hardware', actuators:'hardware', hand:'hardware', interfaces:'motion', deployment:'motion', testing:'motion', capture:'motion', teleop:'motion', partyos:'learning', training:'learning', data:'learning', report:'ecosystem', community:'ecosystem'})[currentPage] || currentPage;
+  document.querySelectorAll('.primary-link').forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === `#${primaryPage}`));
   document.querySelector('#toc-links').innerHTML = page.toc.map(([id, label]) => `<a href="#${currentPage}/${id}" data-section="${id}">${label}</a>`).join('');
   if (updateHash && window.location.hash !== `#${currentPage}`) history.pushState({ page: currentPage }, '', `#${currentPage}`);
   document.querySelector('#sidebar').classList.remove('is-open');
+  document.querySelector('#mobile-menu').setAttribute('aria-expanded', 'false');
+  document.title = `${page.title} | RoboParty Docs`;
   scrollToSection(sectionId);
   window.setTimeout(bindInternalPageLinks, 0);
   observeToc();
 }
 
 function bindInternalPageLinks() {
+  bindReportFigures();
   document.querySelectorAll('[data-page]').forEach(link => {
     link.onclick = event => { event.preventDefault(); renderPage(link.dataset.page); };
   });
@@ -300,7 +306,7 @@ function openSearch() {
 function closeSearch() { const modal = document.querySelector('#search-modal'); modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); }
 function renderSearchResults(query) {
   const normalized = query.trim().toLowerCase();
-  const results = Object.entries(pages).filter(([, page]) => !normalized || `${page.title} ${page.label} ${page.lead}`.toLowerCase().includes(normalized));
+  const results = Object.entries(pages).filter(([key]) => !normalized || pageSearchText.get(key).includes(normalized));
   const target = document.querySelector('#search-results');
   target.innerHTML = results.length ? results.map(([key, page], index) => `<a class="search-result ${index === 0 ? 'is-selected' : ''}" href="#${key}" data-search-page="${key}"><strong>${page.title}</strong><span>${page.kicker} · ${page.lead.slice(0, 58)}...</span></a>`).join('') : '<div class="empty-result">没有匹配的文档。试试“硬件”“部署”或“运动”。</div>';
   target.querySelectorAll('[data-search-page]').forEach(link => link.onclick = event => { event.preventDefault(); closeSearch(); renderPage(link.dataset.searchPage); });
@@ -325,7 +331,6 @@ document.querySelector('#search-input').onkeydown = event => {
   }
 };
 document.querySelector('#theme-toggle').onclick = () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; document.querySelector('#theme-toggle').textContent = next === 'dark' ? '☾' : '☼'; };
-document.querySelector('#language-toggle').onclick = () => { locale = locale === 'zh' ? 'en' : 'zh'; document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en'; renderPage(currentPage, false); };
 document.querySelector('#mobile-menu').onclick = () => { const sidebar = document.querySelector('#sidebar'); const isOpen = sidebar.classList.toggle('is-open'); document.querySelector('#mobile-menu').setAttribute('aria-expanded', String(isOpen)); };
 document.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch(); } if (event.key === 'Escape') closeSearch(); });
 window.addEventListener('popstate', restoreRoute);

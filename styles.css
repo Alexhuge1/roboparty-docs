@@ -232,3 +232,75 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   .visual-gallery { grid-template-columns: 1fr; }
   .visual-gallery img { height: auto; max-height: 250px; }
 }
+
+/* Technical figures retain their full geometry at every viewport size. */
+.brand-mark, .brand-copy, .eyebrow, .doc-hero-kicker, .doc-heading h1, .doc-content h2 { letter-spacing: 0; }
+.sidebar .link-index { display: none; }
+.sidebar-link { min-height: 36px; }
+.doc-heading h1 { font-size: 34px; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-content h2 { font-size: 23px; line-height: 1.45; }
+.doc-content { overflow-wrap: anywhere; }
+.doc-content .report-section h2 { margin-top: 34px; }
+.report-top-link { white-space: nowrap; text-decoration: none; }
+.report-figure { margin: 24px 0 32px; }
+.report-image { display: block; width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; cursor: zoom-in; }
+.report-image:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.report-image img { display: block; width: 100%; height: auto; object-fit: contain; }
+.report-figure figcaption, .figure-dialog-caption { display: flex; align-items: flex-start; gap: 14px; padding-top: 13px; font-size: 13px; line-height: 1.65; }
+.report-figure figcaption > div, .figure-dialog-caption > div { min-width: 0; }
+.report-figure figcaption p, .figure-dialog-caption p { margin: 5px 0; color: var(--muted); }
+.report-figure-number { flex: 0 0 44px; color: var(--blue); font: 600 12px/1.9 ui-monospace, monospace; }
+.report-source { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+.report-source a { text-underline-offset: 3px; }
+.report-note { padding: 12px 0 12px 16px; border-left: 3px solid #159378; font-size: 13px; }
+.report-equation { padding: 20px 0; text-align: center; font: 18px/1.8 Georgia, serif; overflow-x: auto; }
+.report-table { font-size: 13px; }
+.report-table th, .report-table td { min-width: 100px; vertical-align: top; }
+.report-inline-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 22px 0 30px; gap: 0 24px; border-top: 1px solid var(--line); }
+.doc-content .report-chapter { display: flex; flex-direction: column; gap: 3px; padding: 16px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.report-chapter strong { color: var(--blue); font-size: 14px; }
+.report-chapter span { color: var(--muted); font-size: 12px; }
+.report-chapter:hover strong { text-decoration: underline; text-underline-offset: 4px; }
+.report-download { display: flex; align-items: center; gap: 20px; justify-content: space-between; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.report-download > a { flex-shrink: 0; font-weight: 600; }
+.report-download p { font-size: 12px; }
+.report-methods { border-top: 1px solid var(--line); margin: 22px 0; }
+.report-methods details { border-bottom: 1px solid var(--line); }
+.report-methods summary { padding: 15px 4px; cursor: pointer; }
+.report-methods summary code { font-size: 11px; margin: 0 12px 0 3px; }
+.report-methods summary span { font-weight: 600; }
+.report-methods details > div { padding: 0 16px 16px; font-size: 13px; }
+.report-methods summary:hover { color: var(--blue); }
+.figure-open { overflow: hidden; }
+.figure-dialog { width: min(1280px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 0 20px 20px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--text); }
+.figure-dialog::backdrop { background: rgb(0 0 0 / .72); }
+.figure-dialog-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 10px 0; position: sticky; top: 0; background: var(--surface); z-index: 1; }
+.figure-dialog-toolbar a { color: var(--blue); text-decoration: underline; font-size: 13px; }
+.figure-dialog-image { display: flex; justify-content: center; background: #fff; }
+.figure-dialog-image img { display: block; width: auto; height: auto; max-width: 100%; max-height: 70dvh; object-fit: contain; }
+.figure-dialog-caption { padding: 15px 4px 0; }
+.figure-dialog-caption a { color: var(--blue); }
+.visual-gallery img { object-fit: contain; }
+.visual-gallery figure:hover img { transform: none; }
+@media (max-width: 860px) {
+  .sidebar:not(.is-open) { visibility: hidden; pointer-events: none; box-shadow: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .sidebar { transition: none; }
+}
+@media (min-width: 1380px) {
+  .content { grid-template-columns: minmax(0, 860px) 175px; gap: 34px; }
+}
+@media (max-width: 600px) {
+  .doc-heading h1 { font-size: 28px; }
+  .doc-content h2 { font-size: 21px; }
+  .report-inline-links { grid-template-columns: 1fr; }
+  .report-figure figcaption { gap: 8px; }
+  .report-figure-number { flex-basis: 37px; }
+  .report-download { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .report-methods summary code { display: inline-block; margin-right: 7px; }
+  .report-methods summary span { font-size: 12px; }
+  .figure-dialog { width: calc(100% - 16px); max-height: calc(100dvh - 16px); padding: 0 12px 14px; }
+  .figure-dialog-caption { font-size: 12px; }
+}
