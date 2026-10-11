@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RoboParty Docs - RP1 open humanoid platform documentation." />
+    <title>RoboParty Docs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <button class="icon-button mobile-menu-button" id="mobile-menu" aria-label="打开导航" aria-expanded="false">☰</button>
+          <a class="brand" href="#introduction" aria-label="RoboParty Docs 首页">
+            <span class="brand-mark">RP</span>
+            <span class="brand-copy"><strong>ROBOPARTY</strong><small>DOCS</small></span>
+          </a>
+          <nav class="primary-nav" aria-label="主导航">
+            <a href="#introduction" class="primary-link is-active">Systems</a>
+            <a href="#hardware" class="primary-link">Hardware</a>
+            <a href="#motion" class="primary-link">Software</a>
+            <a href="#learning" class="primary-link">Learning</a>
+            <a href="#ecosystem" class="primary-link">Resources</a>
+          </nav>
+          <div class="topbar-actions">
+            <button class="search-trigger" id="search-trigger" aria-label="搜索文档"><span>⌕</span><span class="search-label">搜索文档</span><kbd>Ctrl K</kbd></button>
+            <button class="text-button" id="language-toggle" aria-label="切换语言">中 / EN</button>
+            <button class="icon-button" id="theme-toggle" aria-label="切换深色模式">☼</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-scroll">
+            <div class="sidebar-heading"><span class="eyebrow">SYSTEMS</span><span class="version-chip">v0.1</span></div>
+            <a class="sidebar-title" href="#introduction">RP1 人形机器人平台</a>
+            <p class="sidebar-summary">从机械设计到运动学习的开放开发栈</p>
+            <div class="sidebar-section">
+              <div class="sidebar-section-label">开始使用</div>
+              <a class="sidebar-link is-active" href="#introduction" data-page="introduction"><span class="link-index">01</span>介绍</a>
+              <a class="sidebar-link" href="#platform" data-page="platform"><span class="link-index">02</span>平台概览</a>
+              <a class="sidebar-link" href="#quickstart" data-page="quickstart"><span class="link-index">03</span>快速开始</a>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-section-label">开发指南</div>
+              <a class="sidebar-link" href="#hardware" data-page="hardware"><span class="link-index">04</span>硬件与模型</a>
+              <a class="sidebar-link" href="#motion" data-page="motion"><span class="link-index">05</span>运控与部署</a>
+              <a class="sidebar-link" href="#interfaces" data-page="interfaces"><span class="link-index">06</span>运行时接口</a>
+              <a class="sidebar-link" href="#testing" data-page="testing"><span class="link-index">07</span>整机测试</a>
+              <a class="sidebar-link" href="#capture" data-page="capture"><span class="link-index">08</span>数据采集</a>
+              <a class="sidebar-link" href="#teleop" data-page="teleop"><span class="link-index">09</span>XR 遥操作</a>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-section-label">智能与学习</div>
+              <a class="sidebar-link" href="#learning" data-page="learning"><span class="link-index">10</span>运动与行为</a>
+              <a class="sidebar-link" href="#training" data-page="training"><span class="link-index">11</span>训练工作区</a>
+              <a class="sidebar-link" href="#data" data-page="data"><span class="link-index">12</span>数据与训练</a>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-section-label">项目资源</div>
+              <a class="sidebar-link" href="#ecosystem" data-page="ecosystem"><span class="link-index">13</span>仓库导航</a>
+              <a class="sidebar-link" href="#community" data-page="community"><span class="link-index">14</span>社区与贡献</a>
+            </div>
+          </div>
+          <div class="sidebar-footer">
+            <div class="status-dot"></div><span>文档持续更新中</span>
+            <a href="https://github.com/Roboparty/rptest_repo" target="_blank" rel="noreferrer" aria-label="在 GitHub 打开产品仓库">↗</a>
+          </div>
+        </aside>
+
+        <main class="content" id="main-content">
+          <div class="content-inner">
+            <div class="breadcrumbs"><a href="#introduction">Docs</a><span>/</span><span>Systems</span><span>/</span><strong id="breadcrumb-current">Introduction</strong></div>
+            <div id="doc-content"></div>
+            <footer class="doc-footer">
+              <div><span class="footer-label">RoboParty Docs</span><span>把每一层都变成可理解、可构建的入口。</span></div>
+              <div class="footer-links"><a href="https://github.com/Roboparty/rptest_repo" target="_blank" rel="noreferrer">产品仓库 ↗</a><a href="https://roboparty.com" target="_blank" rel="noreferrer">roboparty.com ↗</a></div>
+            </footer>
+          </div>
+          <aside class="toc" aria-label="本页目录"><div class="toc-title">本页内容</div><div id="toc-links"></div></aside>
+        </main>
+      </div>
+    </div>
+
+    <div class="search-modal" id="search-modal" aria-hidden="true">
+      <div class="search-backdrop" data-close-search></div>
+      <section class="search-dialog" role="dialog" aria-modal="true" aria-label="搜索文档">
+        <div class="search-dialog-input"><span>⌕</span><input id="search-input" type="search" placeholder="搜索 RP1 文档..." autocomplete="off" /><button class="icon-button" data-close-search aria-label="关闭搜索">×</button></div>
+        <div class="search-results" id="search-results"></div>
+        <div class="search-hint"><span>↑ ↓ 选择</span><span>Enter 打开</span><span>Esc 关闭</span></div>
+      </section>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
